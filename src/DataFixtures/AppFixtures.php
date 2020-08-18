@@ -3,15 +3,30 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\User;
 use App\Entity\Phone;
 use App\Entity\Customer;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+    /**
+     * Encodeur des mots de passe
+     * 
+     * @var UserPasswordEncoderInterface
+     */
+    private $encoder;
+
     private $brands = ['Apple', 'Samsung', 'nokia', 'Sony', 'Motorola', 'Huawei'];
     private $colors = ['black', 'white', 'red', 'white', 'blue'];
+    
+
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
 
     public function load(ObjectManager $manager)
     {
@@ -27,16 +42,29 @@ class AppFixtures extends Fixture
             $manager->persist($phone);
         }
 
-        for ($c=0; $c < 30; $c++)
+        for($u=0; $u < 10; $u++)
         {
-            $customer = new Customer();
+            $user = new User();
+            $hash = $this->encoder->encodePassword($user, "password");
 
-            $customer->setFirstName($faker->firstname())
-                ->setlastName($faker->lastName)
+            $user->setFirstName($faker->firstName())
+                ->setLastName($faker->lastName)
                 ->setEmail($faker->email)
-                ->setCompany($faker->company);
+                ->setPassword($hash);
+            $manager->persist($user);
 
-            $manager->persist($customer);
+            for ($c=0; $c < mt_rand(5, 20); $c++)
+            {
+                $customer = new Customer();
+
+                $customer->setFirstName($faker->firstname())
+                    ->setlastName($faker->lastName)
+                    ->setEmail($faker->email)
+                    ->setCompany($faker->company)
+                    ->setUser($user);
+
+                $manager->persist($customer);
+            }
         }
 
         $manager->flush();
