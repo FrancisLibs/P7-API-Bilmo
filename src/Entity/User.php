@@ -2,14 +2,24 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use ApiPlatform\Core\Action\NotFoundAction;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ApiResource(
+ *  collectionOperations={"GET", "POST"},
+ *  itemOperations={"GET"}
+ * )
+ * @UniqueEntity("email", message="This email is not available")
  */
 class User implements UserInterface
 {
@@ -22,6 +32,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\NotBlank(message="Email is required")
+     * @Assert\Email(message = "The email is not a valid email.")
      */
     private $email;
 
@@ -33,16 +45,40 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Email is required")
+     * @Assert\Length(
+     *      min = 6,
+     *      max = 50,
+     *      minMessage = "Your password must be at least {{ limit }} characters long",
+     *      maxMessage = "Your password cannot be longer than {{ limit }} characters",
+     *      allowEmptyString = false
+     * )
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="First name is required")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 255,
+     *      minMessage = "Your first name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters",
+     *      allowEmptyString = false
+     * )
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Name is required")
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 255,
+     *      minMessage = "Name must be at least {{ limit }} characters long",
+     *      maxMessage = "Name cannot be longer than {{ limit }} characters",
+     *      allowEmptyString = false
+     * )
      */
     private $lastName;
 
