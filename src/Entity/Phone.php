@@ -4,10 +4,22 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PhoneRepository;
-use JMS\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
+ * @ApiResource(
+ *  collectionOperations={"GET"},
+ *  itemOperations={"GET"},
+ *  attributes={
+ *      "pagination_enabled"=true,
+ *      "pagination_items_per_page"=20
+ *  },
+ *  normalizationContext={"groups"={"phones_read"}},
+ *  denormalizationContext={"disable_type_enforcement"=true}
+ * )
  */
 class Phone
 {
@@ -15,28 +27,34 @@ class Phone
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups("Phones:read")
+     * @Groups({"phones_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("Phones:read")
+     * @Groups({"phones_read"})
+     * @Assert\NotBlank(message="Brand is required")
      */
     private $brand;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer")
+     * @Groups({"phones_read"})
+     * @Assert\NotBlank(message="Price is required")
+     * @Assert\Type(type="numeric", message ="Price must be numeric")
      */
     private $price;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"phones_read"})
      */
     private $color;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"phones_read"})
      */
     private $description;
 
@@ -62,7 +80,7 @@ class Phone
         return $this->price;
     }
 
-    public function setPrice(?int $price): self
+    public function setPrice($price): self
     {
         $this->price = $price;
 
