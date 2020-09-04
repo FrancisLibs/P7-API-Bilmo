@@ -18,7 +18,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      "pagination_items_per_page"=20
  *  },
  *  normalizationContext={"groups"={"phones_read"}},
- *  denormalizationContext={"disable_type_enforcement"=true}
  * )
  */
 class Phone
@@ -33,16 +32,16 @@ class Phone
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"phones_read"})
      * @Assert\NotBlank(message="Brand is required")
+     * @Groups({"phones_read"})
      */
     private $brand;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"phones_read"})
      * @Assert\NotBlank(message="Price is required")
      * @Assert\Type(type="numeric", message ="Price must be numeric")
+     * @Groups({"phones_read"})
      */
     private $price;
 
