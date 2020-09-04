@@ -7,12 +7,13 @@ use App\Repository\CustomerRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  * @ApiResource(
  *  collectionOperations={"GET", "POST"},
- *  itemOperations={"GET", "DELETE"},
+ *  itemOperations={"GET",  "DELETE"},
  *  attributes={
  *      "pagination_enabled"=true,
  *      "pagination_items_per_page"=20
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      "groups"={"customers_write"}
  *  }
  * )
+ * @UniqueEntity("email", message="This email is not available")
  */
 class Customer
 {
@@ -38,12 +40,12 @@ class Customer
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers_read", "customers_write"})
+     * @Assert\NotBlank(message="First name is required")
      * @Assert\Length(
      *      min = 3,
      *      max = 255,
      *      minMessage = "Your first name must be at least {{ limit }} characters long",
      *      maxMessage = "Your first name cannot be longer than {{ limit }} characters",
-     *      allowEmptyString = false
      * )
      */
     private $firstName;
@@ -51,12 +53,12 @@ class Customer
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customers_read", "customers_write"})
+     * @Assert\NotBlank(message="Name is required")
      * @Assert\Length(
      *      min = 3,
      *      max = 255,
      *      minMessage = "Your name must be at least {{ limit }} characters long",
      *      maxMessage = "Your name cannot be longer than {{ limit }} characters",
-     *      allowEmptyString = false
      * )
      */
     private $lastName;
@@ -84,6 +86,7 @@ class Customer
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
      * @Groups({"customers_read", "customers_write"})
+     * @Assert\NotBlank(message="User is required")
      */
     private $user;
 

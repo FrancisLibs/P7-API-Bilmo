@@ -7,16 +7,18 @@ use App\Repository\UserRepository;
 use ApiPlatform\Core\Action\NotFoundAction;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ApiResource(
- *  collectionOperations={"GET", "POST"},
+ *  normalizationContext={"groups"={"users_read"}},
+ *  collectionOperations={},
  *  itemOperations={"GET"}
  * )
  * @UniqueEntity("email", message="This email is not available")
@@ -27,6 +29,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @groups({"users_read"})
      */
     private $id;
 
@@ -34,6 +37,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(message="Email is required")
      * @Assert\Email(message = "The email is not a valid email.")
+     * @groups({"users_read"})
      */
     private $email;
 
@@ -66,6 +70,7 @@ class User implements UserInterface
      *      maxMessage = "Your first name cannot be longer than {{ limit }} characters",
      *      allowEmptyString = false
      * )
+     * @groups({"users_read"})
      */
     private $firstName;
 
@@ -79,6 +84,7 @@ class User implements UserInterface
      *      maxMessage = "Name cannot be longer than {{ limit }} characters",
      *      allowEmptyString = false
      * )
+     * @groups({"users_read"})
      */
     private $lastName;
 
