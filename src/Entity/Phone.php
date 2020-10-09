@@ -4,20 +4,45 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\PhoneRepository;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 
 /**
  * @ORM\Entity(repositoryClass=PhoneRepository::class)
  * @ApiResource(
- *  collectionOperations={"GET"},
- *  itemOperations={"GET"},
  *  attributes={
- *      "pagination_enabled"=true,
- *      "pagination_items_per_page"=20
+ *      "pagination_enabled"=true, 
+ *      "pagination_items_per_page"=5,
+ *      "order": {"price": "asc"},
  *  },
- *  normalizationContext={"groups"={"phones_read"}},
+ *  itemOperations={
+ *      "GET"={
+ *          "path"="/phones/{id}", 
+ *          "status"=200, 
+ *          "requirements"={"id"="\d+"},
+ *          "normalization_context"={"groups"={"single"}},
+ *          "schemes"={"https"},
+ *      }
+ *  },
+ *  collectionOperations={
+ *      "GET"={
+ *          "path"="/phones", 
+ *          "status"=200,
+ *          "normalization_context"={"groups"={"list"}},
+ *          "schemes"={"https"},
+ *      }
+ *  },
+ * )
+ * @ApiFilter(
+ *  SearchFilter::class, 
+ *  properties={
+ *      "brand": "partial", 
+ *      "price", 
+ *      "color": "partial",
+ *  }
  * )
  */
 class Phone
@@ -26,14 +51,14 @@ class Phone
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"phones_read"})
+     * @Groups({"list", "single"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Brand is required")
-     * @Groups({"phones_read"})
+     * @Groups({"list", "single"})
      */
     private $brand;
 
@@ -41,19 +66,19 @@ class Phone
      * @ORM\Column(type="integer")
      * @Assert\NotBlank(message="Price is required")
      * @Assert\Type(type="numeric", message ="Price must be numeric")
-     * @Groups({"phones_read"})
+     * @Groups({"list", "single"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"phones_read"})
+     * @Groups({"list", "single"})
      */
     private $color;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"phones_read"})
+     * @Groups({"single"})
      */
     private $description;
 

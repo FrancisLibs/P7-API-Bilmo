@@ -4,28 +4,57 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CustomerRepository;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
+ * @UniqueEntity("email", message="This email is not available")
  * @ApiResource(
- *  collectionOperations={"GET", "POST"},
- *  itemOperations={"GET",  "DELETE"},
  *  attributes={
- *      "pagination_enabled"=true,
- *      "pagination_items_per_page"=20
+ *      "pagination_enabled"=true, 
+ *      "pagination_items_per_page"=5,
+ *      "order": {"lastName": "asc"},
  *  },
- *  normalizationContext={
- *      "groups"={"customers_read"}
+ *  itemOperations={
+ *      "GET"={
+ *          "path"="/customers/{id}", 
+ *          "status"=200, 
+ *          "requirements"={"id"="\d+"},
+ *          "normalization_context"={"groups"={"customers:single"}}
+ *      },
+ *      "DELETE"={
+ *          "path"="/customers/{id}", 
+ *          "status"=204, 
+ *          "requirements"={"id"="\d+"},
+ *      }
  *  },
- *  denormalizationContext={
- *      "groups"={"customers_write"}
+ *  collectionOperations={
+ *      "GET"={
+ *          "path"="/customers", 
+ *          "status"=200,
+ *          "normalization_context"={"groups"={"customers:list"}}
+ *      },
+ *      "POST"={
+ *          "path"="/customers", 
+ *          "status"=200
+ *      }
+ *  },
+ *  denormalizationContext={"groups"={"customers:write"}}
+ * )
+ * @ApiFilter(
+ *  SearchFilter::class, 
+ *  properties={
+ *      "firstName": "partial", 
+ *      "lastName": "partial", 
+ *      "email": "partial", 
+ *      "company": "partial",
  *  }
  * )
- * @UniqueEntity("email", message="This email is not available")
  */
 class Customer
 {
@@ -33,13 +62,13 @@ class Customer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"customers_read", "customers_write"})
+     * @Groups({"customers:single", "customers:list", "customers:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "customers_write"})
+     * @Groups({"customers:single", "customers:list", "customers:write"})
      * @Assert\NotBlank(message="First name is required")
      * @Assert\Length(
      *      min = 3,
@@ -52,7 +81,7 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "customers_write"})
+     * @Groups({"customers:single", "customers:list", "customers:write"})
      * @Assert\NotBlank(message="Name is required")
      * @Assert\Length(
      *      min = 3,
@@ -65,7 +94,7 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "customers_write"})
+     * @Groups({"customers:single", "customers:list", "customers:write"})
      * @Assert\NotBlank(message="Email is required")
      * @Assert\Email(message = "The email is not a valid email.")
      */
@@ -73,7 +102,7 @@ class Customer
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"customers_read", "customers_write"})
+     * @Groups({"customers:single", "customers:list", "customers:write"})
      * @Assert\Length(
      *      min = 3,
      *      max = 255,
@@ -85,7 +114,7 @@ class Customer
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
-     * @Groups({"customers_read", "customers_write"})
+     * @Groups({"customers:single", "customers:list", "customers:write"})
      * @Assert\NotBlank(message="User is required")
      */
     private $user;

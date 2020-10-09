@@ -4,10 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
-use ApiPlatform\Core\Action\NotFoundAction;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,8 +16,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ApiResource(
  *  normalizationContext={"groups"={"users_read"}},
+ *  denormalizationContext={"groups"={"user_write"}},
  *  collectionOperations={},
- *  itemOperations={"GET"}
+ *  itemOperations={},
  * )
  * @UniqueEntity("email", message="This email is not available")
  */
@@ -29,7 +28,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @groups({"users_read"})
+     * @groups({"customers:single", "customers:list"})
      */
     private $id;
 
@@ -37,7 +36,7 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank(message="Email is required")
      * @Assert\Email(message = "The email is not a valid email.")
-     * @groups({"users_read"})
+     * @groups({"customers:single", "user_write", "customers:list"})
      */
     private $email;
 
@@ -49,7 +48,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Email is required")
+     * @Assert\NotBlank(message="Password is required")
      * @Assert\Length(
      *      min = 6,
      *      max = 50,
@@ -57,6 +56,7 @@ class User implements UserInterface
      *      maxMessage = "Your password cannot be longer than {{ limit }} characters",
      *      allowEmptyString = false
      * )
+     * @groups({"user_write"})
      */
     private $password;
 
@@ -70,7 +70,7 @@ class User implements UserInterface
      *      maxMessage = "Your first name cannot be longer than {{ limit }} characters",
      *      allowEmptyString = false
      * )
-     * @groups({"users_read"})
+     * @groups({"customers:single", "user_write"})
      */
     private $firstName;
 
@@ -84,7 +84,7 @@ class User implements UserInterface
      *      maxMessage = "Name cannot be longer than {{ limit }} characters",
      *      allowEmptyString = false
      * )
-     * @groups({"users_read"})
+     * @groups({"customers:single", "user_write", "customers:list"})
      */
     private $lastName;
 
