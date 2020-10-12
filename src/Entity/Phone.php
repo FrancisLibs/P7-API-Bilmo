@@ -23,7 +23,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *          "path"="/phones/{id}", 
  *          "status"=200, 
  *          "requirements"={"id"="\d+"},
- *          "normalization_context"={"groups"={"single"}},
+ *          "normalization_context"={"groups"={"phone:single"}},
  *          "schemes"={"https"},
  *      }
  *  },
@@ -31,7 +31,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *      "GET"={
  *          "path"="/phones", 
  *          "status"=200,
- *          "normalization_context"={"groups"={"list"}},
+ *          "normalization_context"={"groups"={"phone:list"}},
  *          "schemes"={"https"},
  *      }
  *  },
@@ -51,14 +51,14 @@ class Phone
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"list", "single"})
+     * @Groups({"phone:list", "phone:single"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Brand is required")
-     * @Groups({"list", "single"})
+     * @Groups({"phone:list", "phone:single"})
      */
     private $brand;
 
@@ -66,19 +66,19 @@ class Phone
      * @ORM\Column(type="integer")
      * @Assert\NotBlank(message="Price is required")
      * @Assert\Type(type="numeric", message ="Price must be numeric")
-     * @Groups({"list", "single"})
+     * @Groups({"phone:list", "phone:single"})
      */
     private $price;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"list", "single"})
+     * @Groups({"phone:list", "phone:single"})
      */
     private $color;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"single"})
+     * @Groups({"phone:single"})
      */
     private $description;
 
