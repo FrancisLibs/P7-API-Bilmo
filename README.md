@@ -15,13 +15,9 @@ Installation :
 - Install dependencies : composer install
 - Edit the .env file to adapt with your database access data
 - Generate the SSH keys with JWT passphrase in .env and add JWT keys path :
-
-  mkdir -p config/jwt
-
-  openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
-
-  openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
-
+  1.mkdir -p config/jwt
+  2.openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
+  3.openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 - Create database : bin/console doctrine:schema:create
 - Load data fixtures bin/console doctrine:fixtures:load -n
 - Run PHP's built-in Web Server bin/console server:run
