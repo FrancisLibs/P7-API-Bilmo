@@ -25,26 +25,26 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *  },
  *  itemOperations={
  *      "GET"={
- *          "path"="/customers/{id}", 
+ *          "path"="/customer/{id}", 
  *          "status"=200, 
  *          "requirements"={"id"="\d+"},
  *          "normalization_context"={"groups"={"customers:single"}}
  *      },
  *      "DELETE"={
- *          "path"="/customers/{id}", 
+ *          "path"="/customer/{id}", 
  *          "status"=204, 
  *          "requirements"={"id"="\d+"},
  *      }
  *  },
  *  collectionOperations={
  *      "GET"={
- *          "path"="/customers", 
+ *          "path"="/customer", 
  *          "status"=200,
  *          "normalization_context"={"groups"={"customers:list"}}
  *      },
  *      "POST"={
  *          "security"="is_granted('IS_AUTHENTICATED_FULLY')",
- *          "path"="/customers", 
+ *          "path"="/customer", 
  *          "status"=200
  *      }
  *  },
