@@ -77,6 +77,11 @@ final class SwaggerDecorator implements NormalizerInterface
                                     ],
                                 ],
                             ],
+                            Response::HTTP_UNAUTHORIZED
+                            => [
+                                'description' => 'Access denied',
+                                'content' => [],
+                            ],
                         ],
                     ],
                 ],
