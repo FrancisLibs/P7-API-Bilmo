@@ -11,7 +11,7 @@ Requirements
 •	Composer
 •	
 Installation : 
-1.	Clone the master branch of https://github.com/FrancisLibs/P7-API-Bilmo.git
+1.	Clone the master branch of "https://github.com/FrancisLibs/P7-API-Bilmo.git"
 2.	Install dependencies : composer install
 3.	Edit the .env file to adapt with your database access data
 4.	Generate the SSH keys with JWT passphrase in .env and add JWT keys path :
