@@ -11,10 +11,10 @@ Requirements
 •	Composer
 •	
 Installation : 
-1.	Clone the master branch of "https://github.com/FrancisLibs/P7-API-Bilmo.git"
-2.	Install dependencies : composer install
-3.	Edit the .env file to adapt with your database access data
-4.	Generate the SSH keys with JWT passphrase in .env and add JWT keys path :
+- Clone the master branch of <https://github.com/FrancisLibs/P7-API-Bilmo.git>
+- Install dependencies : composer install
+- Edit the .env file to adapt with your database access data
+- Generate the SSH keys with JWT passphrase in .env and add JWT keys path :
 
   mkdir -p config/jwt
 
@@ -22,7 +22,7 @@ Installation :
 
   openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 
-5.	Create database : bin/console doctrine:schema:create
-6.	Load data fixtures bin/console doctrine:fixtures:load -n
-7.	Run PHP's built-in Web Server bin/console server:run
-8.	Navigate to localhost:8000
+- Create database : bin/console doctrine:schema:create
+- Load data fixtures bin/console doctrine:fixtures:load -n
+- Run PHP's built-in Web Server bin/console server:run
+- Navigate to localhost:8000
