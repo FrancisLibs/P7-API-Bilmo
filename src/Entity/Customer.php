@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CustomerRepository;
 use ApiPlatform\Core\Annotation\ApiFilter;
@@ -15,6 +16,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  * @UniqueEntity("email", message="This email is not available")
  * @ApiResource(
+ *  normalizationContext={"groups"={"customers:read"}},
+ *  denormalizationContext={"groups"={"customers:write"}},
  *  attributes={
  *      "pagination_enabled"=true, 
  *      "pagination_items_per_page"=5,
@@ -22,35 +25,36 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *  },
  *  itemOperations={
  *      "GET"={
- *          "path"="/customers/{id}", 
+ *          "path"="/customer/{id}", 
  *          "status"=200, 
  *          "requirements"={"id"="\d+"},
  *          "normalization_context"={"groups"={"customers:single"}}
  *      },
  *      "DELETE"={
- *          "path"="/customers/{id}", 
+ *          "path"="/customer/{id}", 
  *          "status"=204, 
  *          "requirements"={"id"="\d+"},
  *      }
  *  },
  *  collectionOperations={
  *      "GET"={
- *          "path"="/customers", 
+ *          "path"="/customer", 
  *          "status"=200,
  *          "normalization_context"={"groups"={"customers:list"}}
  *      },
  *      "POST"={
- *          "path"="/customers", 
+ *          "security"="is_granted('IS_AUTHENTICATED_FULLY')",
+ *          "path"="/customer", 
  *          "status"=200
  *      }
  *  },
- *  denormalizationContext={"groups"={"customers:write"}}
  * )
  * @ApiFilter(
  *  SearchFilter::class, 
  *  properties={
  *      "firstName": "partial", 
- *      "lastName": "partial", 
+ *      "lastName": "partial",
+ *      "price": "exact", 
  *      "email": "partial", 
  *      "company": "partial",
  *  }
@@ -114,7 +118,7 @@ class Customer
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
-     * @Groups({"customers:single", "customers:list", "customers:write"})
+     * @Groups({"customers:write", "customers:list", "customers:single"})
      * @Assert\NotBlank(message="User is required")
      */
     private $user;

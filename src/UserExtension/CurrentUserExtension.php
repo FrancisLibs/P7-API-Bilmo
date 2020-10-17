@@ -40,8 +40,7 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryIt
     }
 
     public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, 
-        string $resourceClass, array $identifiers, 
-        string $operationName = null, array $context = [])
+        string $resourceClass, array $identifiers, string $operationName = null, array $context = [])
     {
         $this->addWhere($queryBuilder, $resourceClass);
     }
@@ -50,7 +49,7 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryIt
     {
         $user = $this->security->getUser();
 
-        // Si la resource est le client et pas un administrateur on ajoute un "where user" dans la requête
+        // Si la resource est le customer et pas un administrateur on ajoute un "where user" dans la requête
         if (
             $resourceClass === Customer::class 
             && 
@@ -59,7 +58,6 @@ class CurrentUserExtension implements QueryCollectionExtensionInterface, QueryIt
             $user instanceof User
         ) {
             $rootAlias = $queryBuilder->getRootAliases()[0];
-
             $queryBuilder->andWhere("$rootAlias.user = :user");
             $queryBuilder->setParameter("user", $user);
         }

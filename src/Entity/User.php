@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Customer;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
@@ -14,12 +15,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ApiResource(
- *  normalizationContext={"groups"={"users_read"}},
- *  denormalizationContext={"groups"={"user_write"}},
- *  collectionOperations={},
- *  itemOperations={},
- * )
+ *
  * @UniqueEntity("email", message="This email is not available")
  */
 class User implements UserInterface
@@ -70,7 +66,7 @@ class User implements UserInterface
      *      maxMessage = "Your first name cannot be longer than {{ limit }} characters",
      *      allowEmptyString = false
      * )
-     * @groups({"customers:single", "user_write"})
+     * @groups({"customers:single", "customers:list", "user_write"})
      */
     private $firstName;
 
