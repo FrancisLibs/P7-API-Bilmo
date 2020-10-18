@@ -33,9 +33,9 @@ openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 ```bash
 	fixtures:load -n
 ```
-Run PHP's built-in Web Server : 
+- Run PHP's built-in Web Server : 
 ```bash
 	bin/console server:run
 ```
-Navigate to localhost:8000
+- Navigate to localhost:8000
 
