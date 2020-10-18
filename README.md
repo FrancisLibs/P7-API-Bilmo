@@ -1,40 +1,28 @@
 # BileMo API
-<p>BileMo is the 7 project by Openclassrooms,for the "Application developer" course. 
-Bilemo provide an API for resellers. 
-The API exposes phones and clients.
-</p>
-## Requirements
-````
-1. Symfony 5.1
-2. MySQL >= 8.0.18
-3. Composer
-````
-## Installation
-1. Clone the master branch of :
-```bash
-    <https://github.com/FrancisLibs/P7-API-Bilmo.git>
-```
-2. Install dependencies : 
-```bash
-	composer install
-```
-3. Edit the .env file to adapt it with your database access data
-4. Generate the SSH keys with JWT passphrase in .env and add JWT keys path :
-```bash
-mkdir -p config/jwt
-openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
-openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
-```
-5. Create database : 
-```bash
-	bin/console doctrine:schema:create
-```
-6. Load data fixtures bin/console doctrine:
-```bash
-	fixtures:load -n
-```
-7. Run PHP's built-in Web Server : 
-```bash
-	bin/console server:run
-```
-8. Navigate to localhost:8000
+<p><em>BileMo is the 7 project by Openclassrooms,for the "Application developer" course.<br>
+Bilemo provide an API for resellers.<br>
+	The API exposes phones and clients.</em></p>
+<h2>Requirements*</h2>
+<ol>
+	<li>Symfony 5.1</li>
+	<li>MySQL >= 8.0.18</li>
+	<li>Composer</li>
+</ol>
+
+<h2>Installation</h2>
+<ol>
+	<li>Clone the master branch of : "https://github.com/FrancisLibs/P7-API-Bilmo.git"</li>
+	<li>Install dependencies : composer install</li>
+	<li>Edit the .env file to adapt it with your database access data</li>
+	<li>Generate the SSH keys with JWT passphrase in .env and add JWT keys path :
+		<ul>
+			<li>mkdir -p config/jwt</li>
+			<li>openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096<br></li>
+			<li>openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout</li>
+		</ul>
+	</li>
+	<li>Create database : bin/console doctrine: schema:create</li>
+	<li>Load data fixtures bin/console doctrine: fixtures:load -n</li>
+	<li>Run PHP's built-in Web Server : bin/console server:run</li>
+	<li>Navigate to localhost:8000</li>
+</ol>
