@@ -1,4 +1,7 @@
 # BileMo API
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/85d68edf55e94146abc94b81d7fd9caa)](https://app.codacy.com/gh/FrancisLibs/P7-API-Bilmo?utm_source=github.com&utm_medium=referral&utm_content=FrancisLibs/P7-API-Bilmo&utm_campaign=Badge_Grade)
+
 <p><em>BileMo is the 7 project by Openclassrooms,for the "Application developer" course.<br>
 Bilemo provide an API for resellers.<br>
 	The API exposes phones and clients.</em></p>
